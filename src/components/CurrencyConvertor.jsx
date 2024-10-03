@@ -8,6 +8,7 @@ function CurrencyConvertor() {
   const [fromCurrency, setFromCurrency] = useState("USD");
   const [toCurrency, setToCurrency] = useState("INR");
   const [convertedAmount, setConvertedAmount] = useState(0);
+  const [text, setText] = useState('Helo')
 
   function amountHandle(amount) {
     if (amount > 0) {
@@ -43,10 +44,27 @@ function CurrencyConvertor() {
     }
   };
 
+  const line=() => {
+    setText(`Converted Amount: ${convertedAmount} ${toCurrency}`);
+  }
+
+  const swap = () => {
+    const temp = fromCurrency;
+    setFromCurrency(toCurrency);
+    setToCurrency(temp);
+  }
+
   useEffect(() => {
     fetchCurrencies();
   }, []);
 
+  useEffect(() => {
+    setText(`Converted Amount: ${convertedAmount} ${toCurrency}`);
+  },[convertedAmount])
+
+  useEffect(() => {
+    setText("");
+  }, [amount, fromCurrency, toCurrency]);
   return (
     <div className="max-w-xl mx-auto my-10 p-5 bg-white rounded-lg shadow-lg">
       <h1 className="mb-5 text-2xl font-semibold text-gray-700">
@@ -63,12 +81,7 @@ function CurrencyConvertor() {
           />
           <button
             className="bg-red-600 text-white px-2 py-1 my-2 rounded-md"
-            onClick={() => {
-              const temp = fromCurrency;
-              setFromCurrency(toCurrency);
-              setToCurrency(temp);
-            }}
-          >
+            onClick={swap}    >
             Swap
           </button>
           <Dropdown
@@ -104,9 +117,9 @@ function CurrencyConvertor() {
           </button>
         </div>
 
-        <div className={`text-green-500 text-lg font-medium text-right
-        ${amount==0?'hidden':''}`}>
-          Converted Amount: {convertedAmount} {toCurrency}
+        <div id='text' className={`text-green-500 text-lg font-medium text-right`}>
+          {/* Converted Amount: {convertedAmount} {toCurrency} */}
+          {text}
         </div>
       </div>
     </div>
